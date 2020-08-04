@@ -19,6 +19,14 @@ function reducer(state, action) {
         selectedSeatId: action.seatId,
         price: action.price,
       };
+
+    case "cancel-booking-process":
+      return {
+        ...state,
+        selectedSeatId: null,
+        price: null,
+        status: "idle",
+      };
   }
 }
 
@@ -33,12 +41,19 @@ export const BookingProvider = ({ children }) => {
     });
   };
 
+  const cancelBooking = () => {
+    dispatch({
+      type: "cancel-booking-process",
+    });
+  };
+
   return (
     <BookingContext.Provider
       value={{
         state,
         actions: {
           beginBookingProcess,
+          cancelBooking,
         },
       }}
     >
