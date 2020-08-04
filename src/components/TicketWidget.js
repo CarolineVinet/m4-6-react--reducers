@@ -5,8 +5,7 @@ import seatimage from "../assets/seat-available.svg";
 import { getRowName, getSeatNum } from "../helpers";
 import { range } from "../utils";
 import { SeatContext } from "./SeatContext";
-import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
+import Seat from "./Seat";
 
 const TicketWidget = () => {
   const { state } = useContext(SeatContext);
@@ -14,7 +13,6 @@ const TicketWidget = () => {
   const numOfRows = state.numOfRows;
   const seatsPerRow = state.seatsPerRow;
   const bookedSeats = state.bookedSeats;
-  const seats = state.seats;
 
   if (state.hasloaded === false) {
     return <CircularProgress />;
@@ -31,28 +29,22 @@ const TicketWidget = () => {
             {range(seatsPerRow).map((seatIndex) => {
               const seatId = `${rowName}-${getSeatNum(seatIndex)}`;
 
+              let isBooked = false;
               let seatFilter = "none";
               if (bookedSeats[seatId]) {
                 seatFilter = "grayscale(100%)";
+                isBooked = true;
               }
 
               return (
                 <SeatWrapper key={seatId}>
-                  <Tippy
-                    content={
-                      "Row " +
-                      rowName +
-                      ", Seat " +
-                      getSeatNum(seatIndex) +
-                      " - $" +
-                      seats[seatId].price
-                    }
-                  >
-                    <SeatImage
-                      style={{ filter: seatFilter }}
-                      src={seatimage}
-                    ></SeatImage>
-                  </Tippy>
+                  <Seat
+                    isBooked={isBooked}
+                    rowName={rowName}
+                    seatIndex={seatIndex}
+                    seatId={seatId}
+                    seatFilter={seatFilter}
+                  ></Seat>
                 </SeatWrapper>
               );
             })}
@@ -86,7 +78,5 @@ const RowLabel = styled.div`
 const SeatWrapper = styled.div`
   padding: 5px;
 `;
-
-const SeatImage = styled.img``;
 
 export default TicketWidget;
