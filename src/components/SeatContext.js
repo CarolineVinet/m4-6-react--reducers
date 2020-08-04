@@ -6,6 +6,7 @@ const initialState = {
   seats: null,
   numOfRows: 0,
   seatsPerRow: 0,
+  bookedSeats: {},
 };
 
 function reducer(state, action) {
@@ -16,6 +17,7 @@ function reducer(state, action) {
         hasloaded: action.hasloaded,
         seats: action.seats,
         numOfRows: action.numOfRows,
+        bookedSeats: action.bookedSeats,
         seatsPerRow: action.seatsPerRow,
       };
   }
@@ -25,10 +27,12 @@ export const SeatProvider = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
   const receiveSeatInfoFromServer = (data) => {
+    console.log(data);
     dispatch({
       type: "receive-seat-info-from-server",
       hasloaded: true,
-      seats: data.bookedSeats,
+      seats: data.seats,
+      bookedSeats: data.bookedSeats,
       numOfRows: data.numOfRows,
       seatsPerRow: data.seatsPerRow,
     });

@@ -5,12 +5,16 @@ import seatimage from "../assets/seat-available.svg";
 import { getRowName, getSeatNum } from "../helpers";
 import { range } from "../utils";
 import { SeatContext } from "./SeatContext";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
 
 const TicketWidget = () => {
   const { state } = useContext(SeatContext);
 
   const numOfRows = state.numOfRows;
   const seatsPerRow = state.seatsPerRow;
+  const bookedSeats = state.bookedSeats;
+  const seats = state.seats;
 
   if (state.hasloaded === false) {
     return <CircularProgress />;
@@ -27,9 +31,28 @@ const TicketWidget = () => {
             {range(seatsPerRow).map((seatIndex) => {
               const seatId = `${rowName}-${getSeatNum(seatIndex)}`;
 
+              let seatFilter = "none";
+              if (bookedSeats[seatId]) {
+                seatFilter = "grayscale(100%)";
+              }
+
               return (
                 <SeatWrapper key={seatId}>
-                  <SeatImage src={seatimage}></SeatImage>
+                  <Tippy
+                    content={
+                      "Row " +
+                      rowName +
+                      ", Seat " +
+                      getSeatNum(seatIndex) +
+                      " - $" +
+                      seats[seatId].price
+                    }
+                  >
+                    <SeatImage
+                      style={{ filter: seatFilter }}
+                      src={seatimage}
+                    ></SeatImage>
+                  </Tippy>
                 </SeatWrapper>
               );
             })}
