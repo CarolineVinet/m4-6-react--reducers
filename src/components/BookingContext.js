@@ -16,7 +16,7 @@ function reducer(state, action) {
       return {
         ...state,
         status: "seat-selected",
-        selectedSeatId: action.seatId,
+        selectedSeatId: action.selectedSeatId,
         price: action.price,
       };
 
