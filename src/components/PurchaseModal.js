@@ -17,7 +17,7 @@ import { BookingContext } from "./BookingContext";
 const PurchaseModal = () => {
   const {
     state: { selectedSeatId, price },
-    actions: { cancelBooking },
+    actions: { cancelBooking, purchaseTicket },
   } = useContext(BookingContext);
 
   const [creditCard, setCreditCard] = React.useState("");
@@ -77,7 +77,17 @@ const PurchaseModal = () => {
                 type="number"
                 required
               ></TextField>
-              <Button variant="contained" color="primary">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() =>
+                  purchaseTicket({
+                    seatId: selectedSeatId,
+                    creditCard,
+                    expiration,
+                  })
+                }
+              >
                 Purchase
               </Button>
             </form>
